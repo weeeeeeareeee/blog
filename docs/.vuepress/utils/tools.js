@@ -1,6 +1,6 @@
-import { readdirSync, lstatSync } from "fs";
+import { readdirSync, lstatSync, existsSync } from "fs";
 import { resolve } from "path";
-
+import prism from "prismjs";
 //判断文件是否为文件
 const isFile = (path) => {
     return lstatSync(path).isFile();
@@ -10,6 +10,9 @@ const isFile = (path) => {
 export const createSidebarByDir = async (dirname) => {
 
     const path = resolve(__dirname, "../../", dirname);
+    if (!existsSync(path)) {
+        return [];
+    }
     const _sidebar = [];
     readdirSync(path).forEach(async file => {
         if (!isFile(resolve(path, file))) {
@@ -25,3 +28,7 @@ export const createSidebarByDir = async (dirname) => {
     });
     return _sidebar;
 }
+
+export const highlight = (content) => {
+    return prism.highlight(content, prism.languages.markup, "markup", 1);
+};
