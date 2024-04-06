@@ -1,6 +1,3 @@
 ---
-title: "测试"
+title: "学习"
 ---
-
-:::demo table/basic
-

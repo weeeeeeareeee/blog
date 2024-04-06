@@ -1,7 +1,7 @@
 import { defineClientConfig } from 'vuepress/client'
 import Element from "element-plus";
 import "element-plus/dist/index.css";
-import "./public/style/index.css";
+import "./public/style/index.scss";
 
 //获取所有案例代码
 const componentFile = import.meta.glob(
@@ -14,7 +14,7 @@ Object.keys(componentFile).forEach((item) => {
     componentList[item.replace("./examples/", "").replace(".vue", "")] =
         componentFile[item].default;
 });
-
+console.log(componentList);
 export default defineClientConfig({
     enhance({ app, router, siteData }) {
         app.use(Element);

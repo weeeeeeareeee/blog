@@ -21,7 +21,6 @@ export const createSidebarByDir = async (dirname) => {
                 text: file,
                 children: await createSidebarByDir(dirname + "/" + file),
             });
-            console.log(_sidebar);
         } else {
             _sidebar.push(`/${dirname}/${file}`);
         }

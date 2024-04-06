@@ -80,8 +80,8 @@ const copyCode = async () => {
 	margin-top: 5px;
 
 	&-showcase {
-		padding: 1.5rem;
-		margin: 0.5px;
+		// padding: 1.5rem;
+		// margin: 0.5px;
 		background-color: var(--bg-color);
 	}
 

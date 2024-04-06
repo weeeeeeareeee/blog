@@ -8,8 +8,6 @@ import { registerComponentsPlugin } from '@vuepress/plugin-register-components';
 import { resolve } from 'path';
 import { readFileSync } from 'fs';
 
-
-console.log(resolve(__dirname, './components'));
 export default defineUserConfig({
   lang: 'zh-CN',
   title: '无涯过客',
