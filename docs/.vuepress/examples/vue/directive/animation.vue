@@ -1,5 +1,5 @@
 <template>
-    <div class="wrapper">
+    <div class="animation-wrapper">
         <div v-slide-in="[30, 1000]" v-for="item in 10" class="item">
             <span>{{ item }}</span>
         </div>
@@ -58,7 +58,7 @@ onUnmounted(() => {
     @return rgb(random(255), random(255), random(255)); // 生成随机的 RGB 颜色
 }
 
-.wrapper {
+.animation-wrapper {
     height: 600px;
     overflow: auto;
     padding: 20px;

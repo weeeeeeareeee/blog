@@ -25,6 +25,9 @@ export default defineUserConfig({
     }
 
   }),
+  alias: {
+    '@': resolve(__dirname),
+  },
   plugins: [
     //自动注册组件
     registerComponentsPlugin({
@@ -51,7 +54,6 @@ export default defineUserConfig({
         return `</Demo>`;
       },
     }),
-
   ],
   bundler: viteBundler(
     {
