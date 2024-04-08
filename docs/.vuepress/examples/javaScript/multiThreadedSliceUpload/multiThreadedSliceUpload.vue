@@ -2,13 +2,13 @@
     <div class="multiThreadedSliceUpload-wrapper">
         <div class="upload-box">
             <ElUpload v-model:file-list="fileList1" :auto-upload="false" :on-change="uploadFile1" class="upload-btn">
-                <ElButton type="primary">单线程切片上传</ElButton>
+                <ElButton type="primary" :loading="loading1">单线程切片上传</ElButton>
             </ElUpload>
             <span class="time">消耗时间：{{ singleTime }}</span>
         </div>
         <div class="upload-box">
             <ElUpload v-model:file-list="fileList2" :auto-upload="false" :on-change="uploadFile2" class="upload-btn">
-                <ElButton type="primary">多线程切片上传</ElButton>
+                <ElButton type="primary" :loading="loading2">多线程切片上传</ElButton>
             </ElUpload>
             <span class="time">消耗时间：{{ multiTime }}</span>
         </div>
@@ -19,71 +19,41 @@
 import { ElUpload, ElButton } from 'element-plus';
 import SparkMD5 from 'spark-md5';
 import { ref } from 'vue';
-import path from "path";
 const singleTime = ref(0);
 const multiTime = ref(0);
 const fileList1 = ref()
 const fileList2 = ref()
 const isFinished = ref(0)
+const loading1 = ref(false)
+const loading2 = ref(false)
+
 
 //单个切片大小
 const CHUNK_SIZE = 5 * 1024 * 1024;
+//线程数
+const THREAD_COUNT = Navigator.hardwareConcurrency || 4;
 
-//workjs单文件
-const workerjs = function () {
-    onmessage = async (e) => {
-        const { file, CHUNK_SIZE, start, end } = e.data;
-
-        const prms = [];
-        for (let i = start; i < end; i++) {
-            prms.push(new Promise((resolve, reject) => {
-                const start = i * CHUNK_SIZE;
-                const end = start + CHUNK_SIZE;
-                const blob = file.slice(start, end);
-                const fileReader = new FileReader()
-                // const md5 = new SparkMD5.ArrayBuffer();
-                fileReader.onload = (e) => {
-                    // md5.append(e.target.result);
-                    resolve({
-                        start,
-                        end,
-                        index: i,
-                        blob,
-                        // hash: md5.end()
-                    })
-                }
-                fileReader.readAsArrayBuffer(blob)
-            }))
-        }
-        const chunks = await Promise.all(prms);
-        postMessage(chunks);
-    };
-}
-//workjs单文件转blob
-var workerData = new Blob(['(' + workerjs.toString() + ')()'], {
-    type: "text/javascript"
-});
 /**
  * 根据单个序号创建对应切片
  * @param {*} file 
  * @param {*} index 
  * @param {*} size 
  */
-const createChunk = (file, index, size) => {
+const createChunk = async (file, index, size) => {
     return new Promise((resolve, reject) => {
         const start = index * size;
         const end = start + size;
         const blob = file.slice(start, end);
         const fileReader = new FileReader()
-        // const md5 = new SparkMD5.ArrayBuffer();
+        const md5 = new SparkMD5.ArrayBuffer();
         fileReader.onload = (e) => {
-            // md5.append(e.target.result);
+            md5.append(e.target.result);
             resolve({
                 start,
                 end,
                 index,
                 blob,
-                // hash: md5.end()
+                hash: md5.end()
             })
         }
         fileReader.readAsArrayBuffer(blob)
@@ -101,12 +71,9 @@ const sliceFile = async (file) => {
         const chunk = await createChunk(file, i, CHUNK_SIZE)
         _result.push(chunk)
     }
-    console.log(_result);
     return _result
 }
 
-//线程数
-const THREAD_COUNT = Navigator.hardwareConcurrency || 4;
 /**
  * 多线程切片
  * @param {*} file 
@@ -122,7 +89,7 @@ const sliceFile2 = async (file) => {
             const end = (i + 1) * _threadCount > _chunksCount ? _chunksCount : (i + 1) * _threadCount
             const start = i * _threadCount
             //blob转url
-            const worker = new Worker(URL.createObjectURL(workerData), { type: "module" });
+            const worker = new Worker("/js/multiThreadedSliceUpload/worker.js", { type: "module" });
             worker.postMessage({
                 file,
                 CHUNK_SIZE,
@@ -146,28 +113,32 @@ const sliceFile2 = async (file) => {
     })
 }
 
-
 /**
  * 单线程上传
  * @param {*} e 
  */
 const uploadFile1 = async (e) => {
+    loading1.value = true;
     const startTime = new Date();
     const file = e.raw
     const chunks = await sliceFile(file)
     const endTime = new Date();
     singleTime.value = endTime - startTime
+    loading1.value = false;
+    console.log(chunks);
 }
 /**
  * 多线程上传
  * @param {*} e 
  */
 const uploadFile2 = async (e) => {
+    loading2.value = true;
     const startTime = new Date();
     const file = e.raw
     const chunks = await sliceFile2(file)
     const endTime = new Date();
     multiTime.value = endTime - startTime
+    loading2.value = false;
     console.log(chunks);
 }
 </script>

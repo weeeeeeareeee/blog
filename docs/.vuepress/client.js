@@ -14,7 +14,7 @@ Object.keys(componentFile).forEach((item) => {
     componentList[item.replace("./examples/", "").replace(".vue", "")] =
         componentFile[item].default;
 });
-console.log(componentList);
+
 export default defineClientConfig({
     enhance({ app, router, siteData }) {
         app.use(Element);

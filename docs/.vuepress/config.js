@@ -22,11 +22,12 @@ export default defineUserConfig({
     ],
     sidebar: {
       '/study/': await createSidebarByDir('study')
-    }
-
+    },
   }),
-  alias: {
-    '@': resolve(__dirname),
+  markdown: {
+    code: {
+      lineNumbers: false
+    }
   },
   plugins: [
     //自动注册组件

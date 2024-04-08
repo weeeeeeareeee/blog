@@ -1,17 +1,7 @@
----
-title: "多线程切片上传"
-description: "keywords:worker,md5,upload"
----
-## 多线程切片上传
-使用``worker``实现多文件切片上传，由于md5 hash计算为同步任务，所以需要使用``worker``多线程能大大节省时间。
+// import SparkMD5 from 'spark-md5';
 
-## 代码实现
-:::demo javaScript/multiThreadedSliceUpload/multiThreadedSliceUpload
-:::
-### worker.js
-``import``引入spark-md5会阻塞新线程，所以换了种使用``import``引入。
-```js{2}
- const createChunk = async (file, index, size) => {
+const createChunk = async (file, index, size) => {
+    //import SparkMD5 会阻塞worker 所以在worker中 import本地的js
     await import('/js/multiThreadedSliceUpload/spark-md5.min.js');
     return new Promise((resolve, reject) => {
         const start = index * size;
@@ -42,4 +32,3 @@ onmessage = async (e) => {
     const chunks = await Promise.all(prms);
     postMessage(chunks);
 }
-```

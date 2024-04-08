@@ -25,7 +25,7 @@ const animates = new WeakMap();
 const vSlideIn = {
     mounted(el, binding) {
 
-        //获取穿过来的值，分别为出生位置与动画持续时间
+        //获取传过来的值，分别为出生位置与动画持续时间
         const _defaultPosition = binding.value[0] || 30;
         const _defaultDuration = binding.value[1] || 1000;
 
