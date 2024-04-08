@@ -59,7 +59,6 @@ export default defineUserConfig({
   bundler: viteBundler(
     {
       viteOptions: {
-
       }
     }
   ),
