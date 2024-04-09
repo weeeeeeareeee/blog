@@ -19,6 +19,8 @@ export const createSidebarByDir = async (dirname) => {
             //是文件夹就递归找到其中的文件
             _sidebar.push({
                 text: file,
+                collapsible: true,
+                sidebarDepth: 0,
                 children: await createSidebarByDir(dirname + "/" + file),
             });
         } else {
@@ -28,6 +30,9 @@ export const createSidebarByDir = async (dirname) => {
     return _sidebar;
 }
 
+const a = await createSidebarByDir("study");
+
+console.log(a);
 export const highlight = (content) => {
     return prism.highlight(content, prism.languages.markup, "markup", 1);
 };
