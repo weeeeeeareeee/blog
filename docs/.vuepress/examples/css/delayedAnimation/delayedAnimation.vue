@@ -66,7 +66,6 @@ onMounted(() => {
 @keyframes ballClip {
     100% {
         clip-path: polygon(80% 0, 100% 0, 100% 100%, 75% 100%, 25% 100%, 0 100%, 0 0);
-
     }
 }
 
@@ -77,16 +76,10 @@ onMounted(() => {
 }
 
 @keyframes colorChange {
-    0% {
-        background: linear-gradient(to right bottom, #ff0000, #ffff00);
-    }
-
-    50% {
-        background: linear-gradient(to right bottom, #008000, #ffff00);
-    }
-
     100% {
         background: linear-gradient(to right bottom, #008000, #adff2f);
+        // background: green;
+
     }
 }
 
@@ -103,6 +96,7 @@ onMounted(() => {
     height: 300px;
     border-radius: 50%;
     background: linear-gradient(to right bottom, #ff0000, #ffff00);
+    // background: red;
     margin: auto;
     position: relative;
 
