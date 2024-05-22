@@ -9,11 +9,11 @@ const config = {
     entry: {
         app1: {
             import: "./src/app1/app1.js",
-            filename: '[name]/[name].bundle.js'
+            filename: '[name]/assert/index.js',
         },
         app2: {
             import: "./src/app2/app2.js",
-            filename: '[name]/[name].bundle.js'
+            filename: '[name]/assert/index.js'
         },
     },
     module: {
@@ -26,18 +26,18 @@ const config = {
     },
     output: {
         path: path.resolve(__dirname, `dist`),
-        clean: true
+        clean: true,
     },
     plugins: [
         new VueLoaderPlugin(),
         new HtmlWebpackPlugin({
-            template: './app1.html',
-            filename: 'app1/app1.html',
+            template: './index.html',
+            filename: 'app1/index.html',
             chunks: ['app1']
         }),
         new HtmlWebpackPlugin({
-            template: './app2.html',
-            filename: 'app2/app2.html',
+            template: './index.html',
+            filename: 'app2/index.html',
             chunks: ['app2']
         }),
     ]
